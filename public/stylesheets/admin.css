@@ -1,0 +1,687 @@
+.is-invalid {
+    border: 2px solid red;
+}
+.invalid-feedback p {
+    margin-left: auto;
+    color: red;
+    font-size: calc(var(--fontSize) - 0.4rem);
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+.header_admin {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 20px;
+    border-bottom: 2px solid black;
+}
+
+.title_admin {
+    width: 25%;
+}
+.date {
+    width: 15%;
+    margin-right: auto;
+}
+.title_admin h2 {
+    text-align: start;
+    text-transform: uppercase;
+    font-size: calc(var(--fontSize) + 0.1rem);
+}
+
+.logut {
+    width: 20%;
+    text-align: end;
+}
+
+.button_admin_logut {
+    width: 50%;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: black;
+    color: var(--bgColorUno);
+    text-transform: uppercase;
+    font-size: calc(var(--fontSize) - 0.3rem);
+}
+
+.button_admin_logut:hover {
+    color: black;
+    background-color: var(--bgColorUno);
+    border: 1px solid black;
+}
+
+.name_admin {
+    width: 100%;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.img_admin {
+    width: 40%;
+    text-align: end;
+    margin: 50px auto 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    width: 4rem;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 3px green;
+}
+
+.body_admin {
+    display: flex;
+    flex-direction: row;
+}
+
+.sideBar {
+    width: 20%;
+    height: 100vh;
+}
+
+.buttons {
+    box-shadow: 0 5px 10px black;
+    margin-top: 50px;
+}
+
+.sideBar_button {
+    width: 100%;
+    height: 3rem;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+
+.sideBar_button:hover {
+    box-shadow: inset 0 0 3px 1px black;
+}
+
+.sideBar_button h4 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+    padding-left: 30px;
+}
+
+.main_admin {
+    width: 80%;
+    padding-top: 20px;
+    background-color: white;
+    border-left: 2px solid black;
+}
+
+.items.products {
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+}
+/*-----------------------------------  DATA PAGINA ---------------------------------------*/
+.collapse_cards_admin {
+    cursor: pointer;
+}
+.cards_admin.minimized {
+    width: 100%;
+    display: flex;
+    margin-bottom: 50px;
+}
+.card_admin.minimized {
+    width: 20%;
+    border: 1px solid black;
+    border-left: 10px solid blue;
+    border-radius: 5px;
+    padding: 0;
+    margin: 2px 0;
+    text-align: center;
+    box-shadow: none;
+}
+.data_page{
+    width: 100%;
+}
+.cards_admin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+.card_admin {
+    width: 30%;
+    border: 1px solid black;
+    border-left: 10px solid blue;
+    border-radius: 10px;
+    padding: 15px 0;
+    margin: 10px 10px;
+    text-align: center;
+    box-shadow: 1px 1px 5px 1px rgb(0 , 0, 0);
+}
+.card_admin.profits {
+    border-left: 10px solid green;
+}
+.card_admin.pending {
+    border-left: 10px solid red;
+}
+.card_admin p {
+    line-height: normal;
+}
+.card_admin span {
+    font-weight: bold;
+    color: blue;
+}
+.profits span {
+    color: green;
+}
+.pending span {
+    color: red;
+}
+
+/*-----------------------------------  PRODUCTOS ---------------------------------------*/
+.products_title {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bgColorUno);
+}
+
+.products_title p {
+    text-transform: uppercase;
+    font-size: calc(var(--fontSize) - 0.5rem);
+    border: 2px solid var(--bgColorUno);
+    font-weight: 800;
+}
+
+.products_title .id {
+    width: 15%;
+}
+.products_title .stock,
+.products_title .discount {
+    width: 5%;
+}
+
+.products_title .price,
+.products_title .category {
+    width: 10%;
+}
+
+.products_title .name {
+    width: 55%;
+}
+
+.oneProduct {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0;
+}
+
+.id {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 15%;
+    border: 2px solid var(--bgColorUno);
+    border-top: none;
+    text-align: center;
+}
+.id p {
+    margin: 0 auto;
+}
+
+.stock,
+.discount {
+    width: 5%;
+    border: 2px solid var(--bgColorUno);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category,
+.price {
+    width: 10%;
+    border: 2px solid var(--bgColorUno);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.name {
+    width: 55%;
+    border: 2px solid var(--bgColorUno);
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oneProduct p {
+    font-size: calc(var(--fontSize) - 0.5rem);
+}
+
+.oneProduct a {
+    color: blue;
+    font-weight: 600;
+}
+
+.button_form_delete {
+    display: flex;
+    justify-self: center;
+    background-color: red;
+    border: none;
+    padding: 2px 5px;
+    border-radius: 5px;
+    box-shadow:  2px 2px 1px 1px black;
+}
+.button_modify {
+    display: flex;
+    justify-self: center;
+    border: none;
+    padding: 2px 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    background-color: chocolate;
+    box-shadow:  2px 2px 1px 1px black;
+}
+
+.button_form_delete:hover,
+.button_modify:hover {
+    box-shadow: inset 2px 2px 1px 1px black;
+}
+
+/*----------------------------------- EDITAR PRODUCTO ---------------------------------------*/
+.edit_product {
+    display: none;
+    flex-direction: column;
+}
+.form_edit {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 30px;
+    margin: 0 auto;
+}
+.form_header_edit {
+    display: none;
+}
+.form_header_edit .title {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    font-size: calc(var(--fontSize) - 0.5rem);
+}
+.form_edit .category,
+.form_edit .name,
+.form_edit .price,
+.form_edit .description,
+.form_edit .stock,
+.form_edit .discount,
+.form_edit .image {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 10px 0;
+    padding: 0;
+    border: none;
+    text-align: right;
+}
+.form_edit .category select,
+#inputCategory option {
+    text-align: center;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+}
+.form_edit label {
+    width: 20%;
+    margin: 0 auto;
+}
+.form_edit input,.form_edit select,.form_edit textarea {
+    width: 40%;
+    margin-right: auto;
+    padding-left: 10px;
+}
+.form_edit textarea {
+    height: 20vh;
+    padding-top: 5px;
+}
+.form_edit .invalid-feedback {
+    width: 73%;
+    margin: 0;
+}
+.button_form_edit {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+.button_form_edit button {
+    width: 20%;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: black;
+    color: var(--bgColorUno);
+    text-transform: uppercase;
+    font-size: calc(var(--fontSize) - 0.5rem);
+}
+.button_form_edit button:hover {
+    color: black;
+    background-color: var(--bgColorUno);
+    border: 1px solid black;
+}
+.button_back button {
+    border: none;
+    color: black;
+    padding-left: 50px;
+    background-color: white;
+    cursor: pointer;
+    transition: all .2s linear;
+}
+.button_back button:hover {
+    color: blue;
+    font-size: calc(var(--fontSize) + 0.1rem);
+}
+
+/*----------------------------------- NUEVO PRODUCTO ---------------------------------------*/
+.new_products {
+    display: none;
+    flex-direction: column;
+}
+.form_create {
+    width: 100%;
+    padding: 30px;
+    margin: 0 auto;
+}
+.form_header .title {
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    font-size: calc(var(--fontSize) - 0.5rem);
+}
+.form_create .category,
+.form_create .name,
+.form_create .price,
+.form_create .description,
+.form_create .stock,
+.form_create .discount,
+.form_create .image {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 10px 0;
+    padding: 0;
+    border: none;
+    text-align: right;
+}
+.form_create .invalid-feedback {
+    width: 73%;
+    margin: 0 auto;
+}
+.form_create .category select,
+#inputCategory option {
+    text-align: center;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+}
+.form_create label {
+    width: 20%;
+    margin: 0 auto;
+}
+.form_create input,.form_create select,.form_create textarea {
+    width: 40%;
+    margin-right: auto;
+    padding-left: 10px;
+}
+.form_create textarea {
+    height: 20vh;
+    padding-top: 5px;
+}
+.button_form_create {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+.button_form_create button {
+    width: 20%;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: black;
+    color: var(--bgColorUno);
+    text-transform: uppercase;
+    font-size: calc(var(--fontSize) - 0.5rem);
+}
+.button_form_create button:hover {
+    color: black;
+    background-color: var(--bgColorUno);
+    border: 1px solid black;
+}
+
+/*----------------------------------- USUARIOS ---------------------------------------*/
+.items.users {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+}
+
+.oneUser,
+.users_title {
+    display: flex;
+    flex-direction: row;
+}
+
+.users_title {
+    background-color: var(--bgColorUno);
+}
+
+.users_title p,
+.oneUser .email {
+    margin: 0 0;
+}
+
+.oneUser > div {
+    padding-left: 5px;
+    border: 1px solid var(--bgColorUno);
+}
+
+.oneUser p {
+    margin: 0 0;
+    font-size: calc(var(--fontSize) - 0.4rem);
+}
+.oneUser .id,
+.users_title .id {
+    width: 5%;
+}
+.oneUser .first_name,
+.users_title .first_name,
+.oneUser .last_name,
+.users_title .last_name,
+.oneUser .city,
+.users_title .city {
+    width: 10%;
+}
+.oneUser .email,
+.users_title .email {
+    width: 35%;
+}
+.oneUser .address,
+.users_title .address {
+    width: 30%;
+}
+
+/* ---------------------------- MENSAJES --------------------------*/
+
+.items.messages_admin {
+    display: none;
+    flex-direction: column;
+}
+.items .user {
+    padding: 5px 20px;
+    margin: 10px 5px;
+    border-radius: 25px;
+}
+.items .user span {
+    background-color: var(--bgColorCuatro);
+    padding: 10px;
+    border-radius: 25px;
+}
+.messages_admin .user .userName {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.messages_admin .user .message {
+    display: none;
+    flex-direction: column;
+    overflow-y: scroll;
+    background-color: white;
+    padding: 5px;
+    border-radius: 25px;
+}
+.singleMessage {
+    display: inline-block;
+    max-width: 50%;
+    border-radius: 25px;
+    background-color: var(--bgColorDos);
+    margin-bottom: 5px;
+}
+.singleMessage.ADMIN {
+    margin-left: 60%;
+}
+.date_message {
+    max-width: 50%;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: calc(var(--fontSize) - 0.5rem);
+    color: var(--color);
+}
+.date_message.ADMIN {
+    max-width: 50%;
+    margin-left: 60%;
+    text-align: center;
+    padding-right: 20px;
+}
+.message_name {
+    color: white;
+    padding-left: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 25px 25px 0 0;
+}
+.message_content {
+    display: inline-block;
+    padding-left: 20px;
+}
+.link_product {
+    display: inline-block;
+}
+.singleMessage p a {
+    padding-left: 20px;
+    font-size: calc(var(--fontSize) - 0.5rem);
+    color: var(--bgColorUno);
+}
+.singleMessage p a:hover {
+    color: blue;
+}
+.message_name.ADMIN {
+    color: white;
+    text-align: end;
+    padding-right: 20px;
+}
+.message_content.ADMIN {
+    padding-right: 20px;
+}
+.writeMessage {
+    display: none;
+    flex-direction: column;
+}
+.writeMessage .form_messages {
+    display: flex;
+    flex-direction: column;
+}
+.form_messages label {
+    font-size: calc(var(--fontSize) - 0.5rem);
+    margin-left: 30px;
+    margin-top: 30px;
+}
+.form_messages button {
+    width: 20%;
+    align-self: center;
+}
+.writeMessage .form_messages textarea {
+    border-radius: 25px;
+    padding: 10px 10px;
+}
+/* ---------------------------- OFERTAS --------------------------------*/
+.promotions {
+    display: none;
+}
+.offers {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.title_offers {
+    width: 100%;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+}
+.allOffers {
+    width: 80%;
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+.create_offer {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.create_offer:hover {
+    color: blue;
+}
+.singleOffer {
+    width: 100%;
+    display: flex;
+    margin-bottom: 10px;
+}
+.singleOffer .product_name {
+    width: 40%;
+    padding-left: 10px;
+    border-left: 10px groove steelblue;
+}
+.singleOffer .offer_description {
+    width: 60%;
+}
+.form_create_promotion {
+    width: 60%;
+    display: none;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 30px auto;
+}
+.form_create_promotion label {
+    width: 100%;
+}
+.form_create_promotion select {
+    width: 100%;
+    margin-bottom: 20px;
+    height: var(--fontSize);
+}
+.form_create_promotion textarea {
+    width: 100%;
+    padding: 10px 10px;
+}
+
+
+

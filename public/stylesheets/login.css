@@ -1,0 +1,103 @@
+.container_form_login {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background: rgb(0,0,0);
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 0%,  rgba(186, 193, 184, 1) 100%); 
+  }
+
+    .form-login {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: var(--bgColorDos);
+        padding: 20px;
+        width: 50%;
+        margin: auto 0;
+        top: 15%;
+        box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+    }
+
+        .image_login {
+            width: 100px;
+            margin: 0 auto;
+        }
+
+            .image_login img {
+                width: 100%;
+            }
+
+        .email, .password, .submit {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .password.invalid-feedback, .email.invalid-feedback {
+            margin: 0;
+        }
+        .password.invalid-feedback p, .email.invalid-feedback p {
+            margin: 0;
+            color: darkred;
+            font-size: calc(var(--fontSize) - 0.3rem);
+        }
+        .fas.fa-exclamation-circle {
+            display: flex;
+            align-self: center;
+            color: darkred;
+            font-size: calc(var(--fontSize) - 0.2rem);
+            margin-right: 10px;
+        }
+
+            .form-login input {
+                background: var(--bgColorDos);
+                text-align: center;
+                border: none;
+                border-bottom: 2px solid var(--color);
+                width: 70%;
+                height: 35px;
+            }
+
+        .encabezado {
+            width: 100%;
+            text-align: center;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+        }
+
+        #rememberme {
+            width: 5%;
+        }
+
+        .rememberme {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: calc(var(--fontSize) - 0.4rem);
+        }
+
+        .button_login {
+            width: 30%;
+            padding: 5px;
+            border: 1px solid var(--color);
+            border-radius: 5px;
+            background-color: var(--color);
+            color: var(--bgColorUno);
+        }
+
+        .button_login:hover {
+            background-color: var(--bgColorHover);
+            color: var(--color);
+        }
+    
+    .volver a{
+        font-size: calc(var(--fontSize) - 0.4rem);
+        color: rgb(0, 0, 172);
+    }
+    .volver a:hover {
+        font-size: var(--fontSize);
+    }

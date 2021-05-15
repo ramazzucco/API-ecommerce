@@ -1,0 +1,302 @@
+.active {
+    color: var(--bgColorCuatro);
+}
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.sideBar_profile {
+    width: 15%;
+    padding: 20px 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.sideBar_buttons_profile {
+    margin-bottom: 100%;
+}
+.dateUser {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.form_update_avatar input {
+    display: none;
+}
+.dateUser label {
+    width: 100%;
+    cursor: pointer;
+}
+.dateUser h4 {
+    margin-left: 5px;
+}
+.myDates,
+.buy,
+.messages,
+.notifications {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+}
+
+.myDates:hover p,
+.buy:hover p,
+.messages:hover p,
+.notifications:hover p,
+.myDates:hover .icon_sideBar_profile,
+.buy:hover .icon_sideBar_profile,
+.messages:hover .icon_sideBar_profile,
+.notifications:hover .icon_sideBar_profile {
+    color: var(--colorHover);
+    cursor: pointer;
+}
+
+.icon_sideBar_profile {
+    width: 15px;
+    margin-right: 20px;
+    color: var(--bgColorUno);
+}
+
+.myDates p,
+.buy p,
+.messages p,
+.notifications p {
+    display: flex;
+    justify-content: start;
+    color: var(--bgColorUno);
+}
+
+.content_profile {
+    width: 85%;
+}
+
+.content_myDates {
+    display: none;
+    margin: 30px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.form_update_profile {
+    border-left: 10px solid rgb(110, 110, 255);
+    border-radius: 3px;
+}
+
+label {
+    display: inline-block;
+    width: 20%;
+    text-align: end;
+}
+
+input {
+    width: 20%;
+    border: none;
+    background-color: white;
+}
+
+.labelPassword {
+    display: none;
+}
+.labelPassword:focus{
+    border-bottom: 1px solid red;
+}
+
+.invalid-feedback {
+    display: flex;
+    justify-content: center;
+    color: red;
+}
+.invalid-feedback i,
+.invalid-feedback p {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.eneable_modify,
+.disable_modify,
+.modify_myDates {
+    display: flex;
+    margin-left: auto;
+    margin-right: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.eneable_modify:hover,
+.disable_modify:hover,
+.modify_myDates:hover {
+    color: var(--colorHover);
+    cursor: pointer;
+}
+
+.disable_modify,
+.modify_myDates {
+    margin-left: 20px;
+}
+
+.buttons_eneabled {
+    display: none;
+    justify-content: end;
+}
+/*========================================== COMPRAS ===============================================*/
+.content_purchases {
+    display: none;
+    flex-direction: column;
+    margin: 30px;
+    padding: 10px 0;
+    background-color: white;
+    border-radius: 5px;
+}
+.purchase {
+    display: flex;
+    flex-direction: row;
+    margin: 5px 0 5px 5px;
+}
+.purchase .image {
+    display: flex;
+    justify-content: center;
+    width: 15%;
+    padding: 0;
+    border-left: 10px solid rgb(110, 110, 255);
+    border-radius: 3px;
+}
+.purchase .image img {
+    width: 50px;
+}
+.purchase .name {
+    width: 65%;
+}
+.purchaseDetail {
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    background-color: var(--bgColorUno);
+}
+.itemDetail {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    margin: 0 auto;
+    text-align: start;
+}
+.itemDetail:first-child {
+    margin: 0;
+}
+.itemDetail:last-child {
+    background-color: var(--bgColorCuatro);
+}
+.verDetalles:hover {
+    color: var(--colorHover);
+    cursor: pointer;
+}
+.purchaseDetail span {
+    align-self: center;
+    margin-left: auto;
+    font-size: 1rem;
+}
+.total_purchases {
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+    padding-left: 20px;
+    background-color: var(--bgColorCuatro);
+}
+/*==================================   MENSAJES   ============================================*/
+.content_messages {
+    display: none;
+    width: 100%;
+}
+.messages_profile {
+    width: 90%;
+    padding: 5px 20px;
+    margin: 50px auto;
+    border-radius: 25px;
+}
+.messages_profile .userName {
+    margin-bottom: 10px;
+}
+.message {
+    overflow-y: auto;
+}
+.message::-webkit-scrollbar {
+    margin-left: 5px;
+}
+.message::-webkit-scrollbar-track {
+    border-radius: 25px;
+}
+.singleMessage {
+    display: inline-block;
+    max-width: 50%;
+    border-radius: 25px;
+    background-color: var(--bgColorDos);
+    margin-bottom: 5px;
+}
+.singleMessage.ADMIN {
+    margin-left: 60%;
+}
+.noMessages{
+    display: none;
+    justify-content: center;
+    margin: 50px;
+    font-size: 3rem;
+    color: white;
+}
+.date_message {
+    max-width: 50%;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: calc(var(--fontSize) - 0.5rem);
+    color: rgba(0, 0, 0, 0.4);
+}
+.date_message.ADMIN {
+    padding-right: 20px;
+    margin-left: 60%;
+    text-align: right;
+}
+.message_name {
+    color: white;
+    padding: 5px 0 5px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 25px 25px 0 0;
+}
+.message_content {
+    width: 100%;
+    padding: 10px 20px;
+    text-align: left;
+}
+.message_name.ADMIN {
+    color: white;
+    text-align: end;
+    padding-right: 20px;
+}
+.message_content.ADMIN {
+    width: 100%;
+    padding-right: 20px;
+}
+.writeMessage {
+    display: flex;
+    flex-direction: column;
+}
+.writeMessage .form_messages {
+    display: flex;
+    flex-direction: column;
+}
+.form_messages label {
+    width: 50%;
+    text-align: start;
+    font-size: calc(var(--fontSize) - 0.5rem);
+    margin-left: 30px;
+    margin-top: 30px;
+}
+.form_messages button {
+    width: 20%;
+    align-self: center;
+}
+.writeMessage .form_messages textarea {
+    border-radius: 25px;
+    padding: 10px 10px;
+}
