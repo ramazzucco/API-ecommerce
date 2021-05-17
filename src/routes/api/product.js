@@ -41,6 +41,7 @@ router.get('/orderby', ProductApiController.orderby);
 router.get("/search", ProductApiController.search);
 router.get('/successfulpayment', ProductApiController.successPayment);
 router.get('/paymentdeclined', ProductApiController.failedPayment);
+router.get('/views', ProductApiController.views);
 router.get('/:id', ProductApiController.show);
 
 router.post("/create", upload.single("image"), ProductApiController.store);

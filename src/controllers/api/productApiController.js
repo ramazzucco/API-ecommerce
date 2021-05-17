@@ -149,9 +149,50 @@ const controller = {
         }
 
     },
+    views: async (req, res) => {
+        console.log('id product: ',req.query.id,'vistas: ',req.query.view)
+        try {
+            if(req.query.view === 1){
+                await db.Visita.create({
+                    products_id: Number(req.query.id),
+                    numero: Number(req.query.view)
+                })
+            } else {
+                await db.Visita.update({
+                    products_id: Number(req.query.id),
+                    numero: Number(req.query.view)
+                },{
+                    where: {
+                        products_id: Number(req.query.id)
+                    }
+                })
+            }
+
+            const views = await db.Visita.findAll();
+
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                data: views
+            })
+        } catch (error) {
+            console.log(error)
+
+            return res.json({
+                meta: {
+                    status: 500
+                },
+                error: true,
+                data: [error]
+            })
+        }
+
+    },
     update: async (req, res) => {
         const newproduct = [req.body];
         const product = await db.Product.findByPk(req.params.id);
+
         newproduct[0].image = product.image;
 
         if(newproduct.length){
