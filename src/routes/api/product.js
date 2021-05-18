@@ -35,7 +35,6 @@ const upload = multer({
     }
 });
 
-
 router.get('/', ProductApiController.index);
 router.get('/orderby', ProductApiController.orderby);
 router.get("/search", ProductApiController.search);

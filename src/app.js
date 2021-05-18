@@ -1,12 +1,14 @@
 const createError = require('http-errors');
+const path = require('path');
 const cors = require('cors');
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 // const methodOverride =  require('method-override');
 // const session = require ('express-session');
 require("dotenv").config();
+
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '';
 
 const usersApiRouter = require('./routes/api/apiUsers');
 const productApiRouter = require('./routes/api/product');
@@ -26,10 +28,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 // app.use(methodOverride('_method'));
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
-}
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   sess.cookie.secure = true // serve secure cookies
+// }
 
 // app.use(
 //   session({
@@ -40,7 +42,7 @@ if (app.get('env') === 'production') {
 // );
 
 app.use(cors())
-app.get('/api',function (req, res, next) {
+app.get(url, function (req, res, next) {
   res.json({msg: 'This is CORS-enabled for all origins!'})
 })
 
