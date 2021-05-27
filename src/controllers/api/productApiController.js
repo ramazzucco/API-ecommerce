@@ -51,7 +51,7 @@ const controller = {
         const visitasId = await db.Visita.findAll({
             where: {
                 numero: {
-                    [Op.gt]: 2
+                    [Op.gt]: 10
                 }
             }, attributes: ["products_id"]
         });
@@ -89,7 +89,7 @@ const controller = {
                         discount: product.discount,
                         category_id: product.category.id,
                         category_title: product.category.title,
-                        link: `http://localhost:3000/products/${product.category_id}/${product.id}`
+                        link: `/page/${product.category_id}/${product.id}`
                     }
                 }),
                 views: views,
@@ -152,7 +152,7 @@ const controller = {
     views: async (req, res) => {
         console.log('id product: ',req.query.id,'vistas: ',req.query.view)
         try {
-            if(req.query.view === 1){
+            if(req.query.view === '1'){
                 await db.Visita.create({
                     products_id: Number(req.query.id),
                     numero: Number(req.query.view)

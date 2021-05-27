@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
+const router = express.Router();
 const path = require("path");
 const DashboardApiController = require('../../controllers/api/dashboardApiController');
-
+const adminRoute = require('../../middlewares/adminRoute');
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -19,7 +19,7 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 * 1024 },
     fileFilter(req, file, next) {
 
-      const isPhoto = file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' ? "" : file;
+      const isPhoto = !['image/png','image/jpg','image/jpeg'].includes(file.mimetype) ? "" : file;
 
       // console.log(file, "----------->",isPhoto)
 
@@ -36,21 +36,19 @@ const upload = multer({
 });
 
 
-router.get('/widgets', DashboardApiController.widgets);
-router.get('/lastProduct', DashboardApiController.lastProduct);
-router.get('/categories', DashboardApiController.categories);
-router.get('/allProducts', DashboardApiController.allProducts);
-router.get("/morevisited", DashboardApiController.moreVisited);
+router.post('/widgets', adminRoute, DashboardApiController.widgets);
+router.post('/lastproduct', adminRoute, DashboardApiController.lastproduct);
+router.post('/categories', adminRoute, DashboardApiController.categories);
+router.post('/allProducts', adminRoute, DashboardApiController.allProducts);
+router.post("/views", adminRoute, DashboardApiController.views);
+router.post('/users', adminRoute, DashboardApiController.users);
+router.post("/messages", adminRoute, DashboardApiController.messages);
+// router.get('/promotions', DashboardApiController.promotions);
 
-router.get('/category/:categoryId', DashboardApiController.category);
+// router.get('/category/:categoryId', DashboardApiController.category);
 
-router.get('/usersWithMessages', DashboardApiController.usersWithMessages);
-
-router.get("/messages", DashboardApiController.messages);
-router.post("/newmessage", DashboardApiController.newmessage)
-
-router.get('/promotions', DashboardApiController.promotions);
-router.post("/promotions",upload.single("image"), DashboardApiController.promotions_store)
+// router.post("/newmessage", DashboardApiController.newmessage)
+// router.post("/promotions",upload.single("image"), DashboardApiController.promotions_store)
 
 
 

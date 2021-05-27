@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         product_link: {
             type: DataTypes.STRING,
             allowNull: true

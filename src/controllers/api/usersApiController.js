@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const functions = require('../../functions/users');
 const remembermePath = path.join(__dirname, '../../rememberme.json');
+const incommingmessagesPath = path.join(__dirname, '../../incommingmessages.json');
 const { Op } = db.Sequelize;
 
 const transporter = nodemailer.createTransport({
@@ -201,14 +202,14 @@ module.exports = {
             if(req.body.rememberme){
                 const rememberme = JSON.parse(fs.readFileSync(remembermePath,{encoding: 'utf-8'}));
 
-                user[0].dataValues.tokenhashed = bcrypt.hashSync(newtoken, 10)
+                user[0].dataValues.tokenhashed = bcrypt.hashSync(newtoken, 10);
 
-                rememberme.push({ ...user[0].dataValues })
+                rememberme.push({ ...user[0].dataValues });
 
                 fs.writeFileSync(remembermePath,JSON.stringify(rememberme, null, ' '));
             }
 
-            if(user[0].status < 2){
+            if(user[0].status !== 2){
                 const username = user[0].first_name + ' ' + user[0].last_name;
                 const { categorys, purchases, users, messages, orders} = await functions.getData(user[0].id, username);
 
@@ -229,34 +230,12 @@ module.exports = {
 
                 adminToken.push(user[0].dataValues.token);
 
-                console.log("from login: ",user[0].dataValues.token)
-                const {
-                    categorys,
-                    products,
-                    users,
-                    messages,
-                    orderSuccess,
-                    profits,
-                    orderPending,
-                    pending,
-                    promotions
-                } = await functions.getDataAdmin();
-
                 return res.json({
                     meta: {
                         status: 200
                     },
                     data: {
-                        user: user[0],
-                        categorys: categorys,
-                        products: products,
-                        users: users,
-                        messages: messages,
-                        orderSuccess: orderSuccess,
-                        profits: profits,
-                        orderPending: orderPending,
-                        pending: pending,
-                        promotions: promotions
+                        user: user[0]
                     }
                 })
             }
@@ -278,6 +257,7 @@ module.exports = {
 
     session: async (req, res) => {
 
+        // Si guardo la sesion.
         if(req.body.session){
 
             const username = req.body.user.first_name + ' ' + req.body.user.last_name;
@@ -311,6 +291,7 @@ module.exports = {
             })
         }
 
+        // Si hay sesion, pero sin recordar.
         const user = await db.User.findAll({
             where: {
                 password: { [Op.like]: [password] },
@@ -675,6 +656,14 @@ module.exports = {
             const message = req.body;
 
             message.date = date;
+
+            if(!message.products_id){
+                const incommingmessages = await JSON.parse(fs.readFileSync(incommingmessagesPath,{encoding: 'utf-8'}));
+
+                incommingmessages.push(message);
+
+                fs.writeFileSync(incommingmessagesPath, JSON.stringify(incommingmessages,null,' '));
+            }
 
             console.log(message)
 

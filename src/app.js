@@ -8,7 +8,8 @@ const logger = require('morgan');
 // const session = require ('express-session');
 require("dotenv").config();
 
-const url = process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '';
+const url = process.env.NODE_ENV === 'development' ?
+  `${process.env.URL_API_DEV}/api` : `${process.env.URL_API_PROD}/api`;
 
 const usersApiRouter = require('./routes/api/apiUsers');
 const productApiRouter = require('./routes/api/product');

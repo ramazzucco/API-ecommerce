@@ -1,5 +1,9 @@
 let db = require("../../database/models");
-const { sequelize } = db.Sequelize;
+const fs = require('fs');
+const path = require('path');
+const incommingmessagesPath = path.join(__dirname, '../../incommingmessages.json');
+
+const { Op } = db.Sequelize;
 
 const controller = {
 
@@ -30,8 +34,9 @@ const controller = {
 
         products.map(product => {
             amount = amount + (product.price * product.stock)
-        })
-        res.json({
+        });
+
+        return res.json({
             meta: {
                 status: 200,
                 link: "/api/dashboard/widgets"
@@ -40,106 +45,121 @@ const controller = {
                 {
                     type: "primary",
                     text: "Total en Mercaderia",
-                    value: amount,
+                    value: amount.toLocaleString(),
                     icon: "fa-dollar-sign"
                 },
                 {
                     type: "success",
                     text: "Ganancias",
-                    value: profits,
+                    value: profits.toLocaleString(),
                     icon: "fa-dollar-sign"
                 },
                 {
                     type: "danger",
                     text: "Pendiente",
-                    value: pending,
+                    value: pending.toLocaleString(),
                     icon: "fa-dollar-sign"
                 },
             ]
         })
 
     },
-    lastProduct: async (req, res) => {
+    lastproduct: async (req, res) => {
         const product = await db.Product.findOne({
             limit: 1,
             order: [["id", 'DESC']],
             include: ["category"]
         })
 
-        res.json({
+        return res.json({
             meta: {
                 status: 200,
                 link: "/api/dashboard/lastProduct"
             },
-            data:
-                    {
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        description: product.description,
-                        image: product.image,
-                        stock: product.stock,
-                        discount: product.discount,
-                        category: product.category.title,
-                        link: `http://localhost:3000/products/${product.category.id}/${product.id}`
-                    }
+            data: {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                description: product.description,
+                image: product.image,
+                stock: product.stock,
+                discount: product.discount,
+                category: product.category.title,
+                link: `/page/${product.category.id}/${product.id}`
+            }
         })
     },
     categories: async (req, res) => {
-        const products = await db.Product.findAll();
+        const products = await db.Product.findAll({
+            attributes: ['id']
+        });
         const categorys = await db.Category.findAll({ include: ["products"] })
-        res.json({
+
+        return res.json({
             meta: {
                 status: 200,
-                totalProducts: products.length,
+                totalproducts: products.length,
                 link: "/api/dashboard/categories"
             },
             data:
                 categorys.map(category => {
-                    return {
+                    const data = {
                         total_products: category.products.length,
-                        products: category
+                        category: category
                     }
+                    return data;
                 })
 
         })
 
     },
-    moreVisited: async (req, res) => {
-        const moreVisited = await db.Visita.findAll();
-        const moreVisitedTop10 = await db.Visita.findAll({
+    views: async (req, res) => {
+        const views = await db.Visita.findAll();
+        const viewstop10 = await db.Visita.findAll({
             limit: 10,
             order: [["numero", "DESC"]]
         });
 
         const products = await db.Product.findAll({
             where: {
-                id: moreVisitedTop10.map( v => { return v.products_id })
-            },attributes: ["id","name","category_id"]
+                id: viewstop10.map( v => { return v.products_id })
+            },
+            attributes: ["id","name","category_id"]
+        })
+
+        const productswhithoutviews = await db.Product.findAll({
+            where: {
+                id: {
+                    [Op.notIn]: views.map( v => { return v.products_id })
+                }
+            },
+            attributes: ["id","name","category_id"]
         })
 
         const top10 = [];
-        for(let n=0; n < moreVisitedTop10.length; n++) {
+
+        for(let n=0; n < viewstop10.length; n++) {
             products.map((product,i)=> {
-                if(product.id === moreVisitedTop10[n].products_id){
+                if(product.id === viewstop10[n].products_id){
                     top10.push({
-                        visitaN: moreVisitedTop10[n].numero,
-                        productsId: moreVisitedTop10[n].products_id,
-                        category: product.category_id,
-                        product: product.name,
+                        products_id: viewstop10[n].products_id,
+                        category_id: product.category_id,
+                        name: product.name,
+                        views: viewstop10[n].numero,
                     })
                 }
             })
         }
 
-        res.json({
+        return res.json({
             meta: {
                 status: 200,
                 link: "/api/dashboard/morevisited"
             },
             data: {
-                moreVisited: moreVisited.length,
-                top10: top10
+                views: views.length,
+                top10: top10,
+                notviews: productswhithoutviews
             }
         })
     },
@@ -147,48 +167,52 @@ const controller = {
         const products = await db.Product.findAll ({include: ['category']});
 
     },
-    category: async (req, res) => {
-        const productByCategory = await db.Product.findAll({
-            where: { category_id: req.params.categoryId}
-        });
-        let total = 0;
-        productByCategory.map(product => {
-            total = total + (Number(product.price) * Number(product.stock));
-        })
-        const category = await db.Category.findByPk(req.params.categoryId);
+    // category: async (req, res) => {
+    //     const productByCategory = await db.Product.findAll({
+    //         where: { category_id: req.params.categoryId}
+    //     });
 
-        res.json({
-            meta: {
-                status: 200,
-                title: category.title,
-                totalItems: productByCategory.length,
-                totalPrice: total.toLocaleString(),
-                link: `api/dashboard/category/${category.id}`
-            },
-            data: productByCategory.map(product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price).toLocaleString(),
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: product.category,
-                    page: `http://localhost:3000/products/${category.id}/${product.id}`,
-                    link: `/api/product/${product.id}`
-                }
-            })
-        })
-    },
+    //     let total = 0;
+
+    //     productByCategory.map(product => {
+    //         total = total + (Number(product.price) * Number(product.stock));
+    //     })
+    //     const category = await db.Category.findByPk(req.params.categoryId);
+
+    //     res.json({
+    //         meta: {
+    //             status: 200,
+    //             title: category.title,
+    //             totalItems: productByCategory.length,
+    //             totalPrice: total.toLocaleString(),
+    //             link: `api/dashboard/category/${category.id}`
+    //         },
+    //         data: productByCategory.map(product => {
+    //             return {
+    //                 id: product.id,
+    //                 name: product.name,
+    //                 price: Number(product.price).toLocaleString(),
+    //                 description: product.description,
+    //                 image: product.image,
+    //                 stock: product.stock,
+    //                 discount: product.discount,
+    //                 category: product.category,
+    //                 page: `http://localhost:3000/products/${category.id}/${product.id}`,
+    //                 link: `/api/product/${product.id}`
+    //             }
+    //         })
+    //     })
+    // },
     promotions: async (req, res) => {
         const promotions = await db.Promotion.findAll();
+
         const products = await db.Product.findAll({
             where: {
                 id: promotions.map(promo => { return promo.products_id })
             }, attributes: ["name"]
         })
-        res.json({
+
+        return res.json({
             meta: {
                 status: 200,
                 totalItems: promotions.length,
@@ -203,67 +227,66 @@ const controller = {
             })
         })
     },
-    usersWithMessages: async (req, res) => {
-        const users = await db.User.findAll();
-        const messages = await db.Message.findAll({
-            where: {
-                users_id: users.map(user => { return user.id })
-            }
-        });
-        const usersId = messages.map( m => { if(m.users_id != 1){ return m.users_id } })
-        const uniqueUsersId = [...new Set(usersId)]
-        const usersIdFiltered = uniqueUsersId.filter( user => { return user != undefined })
-        const usersWithMessages = [];
-        for(user of users){
-            usersIdFiltered.map(id => {
-                if(id == user.id){
-                    usersWithMessages.push({
-                        id: user.id,
-                        name: user.first_name + " " + user.last_name,
-                    })
-                }
-            })
-        }
+    // usersWithMessages: async (req, res) => {
+    //     const users = await db.User.findAll();
+    //     const messages = await db.Message.findAll({
+    //         where: {
+    //             users_id: users.map(user => { return user.id })
+    //         }
+    //     });
+    //     const usersId = messages.map( m => { if(m.users_id != 1){ return m.users_id } })
+    //     const uniqueUsersId = [...new Set(usersId)]
+    //     const usersIdFiltered = uniqueUsersId.filter( user => { return user != undefined })
+    //     const usersWithMessages = [];
+    //     for(user of users){
+    //         usersIdFiltered.map(id => {
+    //             if(id == user.id){
+    //                 usersWithMessages.push({
+    //                     id: user.id,
+    //                     name: user.first_name + " " + user.last_name,
+    //                 })
+    //             }
+    //         })
+    //     }
 
-        res.json({
+    //     return res.json({
+    //         meta:{
+    //             status: 200,
+    //             totalItems: usersWithMessages.length,
+    //             link: 'api/dashboard/usersWithMessages'
+    //         },
+    //         data: usersWithMessages
+    //     })
+    // },
+    users: async (req, res) => {
+        const users = await db.User.findAll();
+
+        return res.json({
             meta:{
                 status: 200,
-                totalItems: usersWithMessages.length,
-                link: 'api/dashboard/usersWithMessages'
+                link: 'api/dashboard/users'
             },
-            data: usersWithMessages
+            data: users
         })
     },
     messages: async (req, res) => {
         const messages = await db.Message.findAll();
-        const users = await db.User.findAll({
+        const userswhithmessages = await db.User.findAll({
             where: {
-                id: messages.map(m => m.users_id)
+                id: messages.map( msg => msg.users_id)
             }
-        })
-        const products = await db.Product.findAll();
+        });
+        const incommingmessages = await JSON.parse(fs.readFileSync(incommingmessagesPath,{encoding: 'utf-8'}));
 
-        res.json({
+        return res.json({
             meta:{
                 status: 200,
                 totalItems: messages.length,
-                users: users,
                 link: 'api/dashboard/messages'
             },
-            data: messages.map( message => {
-                const product = products.filter(p => p.id == message.products_id);
-                return {
-                    id: message.id,
-                    users_id: message.users_id,
-                    to_id: message.to_id,
-                    content: message.content,
-                    products_id: message.products_id,
-                    product: product[0],
-                    from_name: message.from_name,
-                    to_name: message.to_name,
-                    date: message.date
-                }
-            })
+            incommingmessages: incommingmessages,
+            userswhithmessages: userswhithmessages,
+            data: messages
         })
     },
     promotions_store: async (req, res) => {
@@ -273,29 +296,61 @@ const controller = {
 
         promotion.image = req.file.filename;
 
-        const newPromotion = await db.Promotion.create(promotion)
+        await db.Promotion.create(promotion)
+
+        const newpromotions = await db.Promotion.findAll();
 
         if(errors){
-            res.json({
-                status: 200,
-                create: "fail",
-                errors: errors
+            return res.json({
+                meta: {
+                    status: 200,
+                },
+                error: true,
+                data: [{
+                    field: 'promotions',
+                    message: errors.msg
+                }]
             })
         } else {
-            res.json({
-                status: 200,
-                create: "success",
+            return res.json({
+                meta: {
+                    status: 200,
+                },
+                data: newpromotions,
             })
         }
 
     },
     newmessage: async (req, res) => {
         console.log(req.body)
+
+        incommingmessage.push(req.body);
+
         const newmessage = await db.Message.create(req.body);
+
         console.log(newmessage)
-        res.json({
-            status: 200,
-            newmessage: newmessage
+
+        if(!newmessage){
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                error: true,
+                modal: true,
+                data: [{
+                    field: 'message',
+                    message: 'No se ha podido enviar el mensaje.'
+                }]
+            })
+        }
+
+        const messages = await db.Message.findAll();
+
+        return res.json({
+            meta: {
+                status: 200,
+            },
+            data: messages,
         })
     }
 }
