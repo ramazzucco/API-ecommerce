@@ -44,7 +44,7 @@ const controller = {
             data: [
                 {
                     type: "primary",
-                    text: "Total en Mercaderia",
+                    text: "Mercaderia",
                     value: amount.toLocaleString(),
                     icon: "fa-dollar-sign"
                 },
@@ -163,9 +163,30 @@ const controller = {
             }
         })
     },
-    allProducts: async (req, res) => {
-        const products = await db.Product.findAll ({include: ['category']});
+    products: async (req, res) => {
+        try {
+            const products = await db.Product.findAll ({include: ['category']});
 
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                data: products
+            })
+        } catch (error) {
+            console.log('ERROR EN BASE DE DATOS: ',error)
+
+            res.json({
+                meta: {
+                    status: 400
+                },
+                error: true,
+                data: {
+                    message: '',
+                    dbmessage: product ? '' : error.original.sqlMessage
+                }
+            })
+        }
     },
     // category: async (req, res) => {
     //     const productByCategory = await db.Product.findAll({

@@ -565,7 +565,7 @@ module.exports = {
                 })
 
                 if(user.avatar !== 'avatardefault.png'){
-                    fs.unlinkSync(path.join(__dirname,"../../../public/images/" + user.avatar));
+                    fs.unlinkSync(path.join(__dirname,"../../../public/images/avatars/" + user.avatar));
                 }
 
                 const saveavatar = {...user, avatar: req.file.filename}

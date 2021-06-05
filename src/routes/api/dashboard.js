@@ -21,8 +21,6 @@ const upload = multer({
 
       const isPhoto = !['image/png','image/jpg','image/jpeg'].includes(file.mimetype) ? "" : file;
 
-      // console.log(file, "----------->",isPhoto)
-
       if (isPhoto) {
         next(null, true);
       } else {
@@ -39,7 +37,7 @@ const upload = multer({
 router.post('/widgets', adminRoute, DashboardApiController.widgets);
 router.post('/lastproduct', adminRoute, DashboardApiController.lastproduct);
 router.post('/categories', adminRoute, DashboardApiController.categories);
-router.post('/allProducts', adminRoute, DashboardApiController.allProducts);
+router.post('/products', adminRoute, DashboardApiController.products);
 router.post("/views", adminRoute, DashboardApiController.views);
 router.post('/users', adminRoute, DashboardApiController.users);
 router.post("/messages", adminRoute, DashboardApiController.messages);

@@ -3,6 +3,7 @@ const functions = require('../../functions/products');
 const fs = require("fs");
 const path = require("path");
 const mercadopago = require("mercadopago");
+const { validationResult } = require("express-validator");
 const { Op } = db.Sequelize;
 
 mercadopago.configure({
@@ -11,32 +12,76 @@ mercadopago.configure({
 
 const controller = {
     store: async (req, res) => {
-        req.body.category_id = Number(req.body.category_id);
-        req.body.price = Number(req.body.price);
-        req.body.stock = Number(req.body.stock);
-        req.body.discount = Number(req.body.discount);
-        req.body.image = req.file ? req.file.filename : req.body.image
-        const product = [req.body]
+        const errorsValidator = validationResult(req);
 
-        const category = await db.Category.findByPk(product.category_id)
+        let errors = errorsValidator.errors.filter( error => { return error.value != undefined })
 
-        if(product.length){
-            await db.Product.create(product[0])
+        if(req.file && req.file.error){
+            errors.push(req.file.error)
+        }
 
-            res.json({
-                status: 200,
-                error: false,
-                msg: "Producto creado",
-                categoryName: category
+        console.log('product store errors: ', errors)
+
+        if(errors.length){
+
+            errors = errors.map( error => {
+                return {
+                    field: error.param,
+                    message: error.msg
+                }
+            })
+
+            return res.json({
+                meta: {
+                    status: 300
+                },
+                error: true,
+                product: true,
+                data: errors
             })
         } else {
-            res.json({
-                status: 404,
-                error: true,
-                msg: "El Producto no se pudo crear"
-            })
+
+            try {
+
+                delete req.body.token;
+                delete req.body.user;
+                delete req.body.session;
+
+                req.body.category_id = Number(req.body.category_id);
+                req.body.price = Number(req.body.price);
+                req.body.stock = Number(req.body.stock);
+                req.body.discount = Number(req.body.discount);
+                req.body.image = req.file ? req.file.filename : 'sin_imagen.jpg';
+
+                const productcreated = await db.Product.create(req.body);
+
+                let newproduct;
+
+                if(productcreated){
+                    newproduct = await db.Product.findByPk(productcreated.id,{include: ['category']})
+                }
+
+                return res.json({
+                    meta: {
+                        status: 200
+                    },
+                    product: true,
+                    create: true,
+                    data: newproduct
+                })
+            } catch (error) {
+                return res.json({
+                    meta: {
+                        status: 500
+                    },
+                    error: true,
+                    data:[{
+                        field: 'modal',
+                        message: 'No se ha podido agregar el producto.'
+                    }]
+                })
+            }
         }
-        console.log(product, req.file)
     },
     index: async (req, res) => {
         const visit_page = await Number(req.cookies.visit_page);
@@ -99,7 +144,7 @@ const controller = {
             }
         });
     },
-    show: async (req, res, next) => {
+    show: async (req, res) => {
 
         try {
             const product = await db.Product.findByPk(req.params.id, {
@@ -190,57 +235,149 @@ const controller = {
 
     },
     update: async (req, res) => {
-        const newproduct = [req.body];
-        const product = await db.Product.findByPk(req.params.id);
+        delete req.body.category;
+        delete req.body.token;
 
-        newproduct[0].image = product.image;
+        const errorsValidator = validationResult(req);
 
-        if(newproduct.length){
-            await db.Product.update(newproduct[0], {
-                where: {
-                    id: req.params.id
+        let errors = errorsValidator.errors.filter( error => { return error.value !== req.body.image })
+
+        if(req.file && req.file.error){
+            errors.push(req.file.error)
+        }
+
+        console.log(errors)
+
+        if(errors.length){
+
+            errors = errors.map( error => {
+                return {
+                    field: error.param,
+                    message: error.msg
                 }
             })
 
-            res.json({
-                status: 200,
-                error: false,
-                msg: "Producto Actualizado"
+            return res.json({
+                meta: {
+                    status: 300
+                },
+                error: true,
+                product: true,
+                data: errors
             })
         } else {
-            res.json({
-                status: 404,
-                error: true,
-                msg: "El Producto no se pudo actualizar"
-            })
+            if(req.file){
+                if(req.body.oldimage !== 'sin_imagen.jpg'){
+                    fs.unlinkSync(path.join(__dirname,"../../../public/images/" + req.body.oldimage));
+                }
+
+                delete req.body.oldimage;
+
+                req.body.image = req.file.filename;
+            }
+
+
+            console.log('desde product controller: ',req.body, req.file)
+            try {
+                const update = await db.Product.update(req.body, {
+                    where: {
+                        id: req.body.id
+                    }
+                });
+
+                const productupdated = update && await db.Product.findAll({include: ['category']});
+
+                if(productupdated !== null){
+                    return res.json({
+                        meta: {
+                            status: 200
+                        },
+                        product: true,
+                        update: true,
+                        data: productupdated
+                    })
+                } else {
+                    return res.json({
+                        meta: {
+                            status: 500
+                        },
+                        error: true,
+                        product: true,
+                        data: [{
+                            field: 'modal',
+                            message: 'Error de servidor, compruebe si el producto fue actualizado.'
+                        }]
+                    })
+                }
+
+            } catch (error) {
+                console.log(error)
+
+                return res.json({
+                    meta: {
+                        status: 500
+                    },
+                    error: true,
+                    data: [{
+                        field: 'modal',
+                        message: error
+                    }]
+                })
+
+            }
         }
     },
     delete: async (req, res) => {
-        const ids = req.params.id.split(",")
+        console.log(req.body)
 
-        const product = await db.Product.findAll({
-            where:{
-                id: ids
-            }
-        })
+        try {
+            const products = await db.Product.findAll({
+                where:{
+                    id: req.body.ids
+                }
+            });
 
-        product.map(p => {
-            if(p.image != "sin_imagen.jpg"){
-                fs.unlinkSync(path.join(__dirname,`../../../public/images/${p.image}`))
+            products.map( product => {
+                if(product.image !== "sin_imagen.jpg"){
+                    fs.unlinkSync(path.join(__dirname,`../../../public/images/${product.image}`))
+                }
+            });
+
+            const deleted = await db.Product.destroy({ where: { id: req.body.ids } });
+
+            const productsdeleted = deleted && await db.Product.findAll({include: ['category']});
+
+            if(productsdeleted !== null){
+                return res.json({
+                    meta: {
+                        status: 200
+                    },
+                    product: true,
+                    delete: true,
+                    productsdeleted: deleted,
+                    data: productsdeleted
+                });
             }
-        })
-        const productDeleted = await db.Product.destroy({ where: { id: ids } });
-        console.log("PRODUCTO ELIMINADO: ",productDeleted)
-        const newProducts = await db.Product.findAll({
-            where:{
-                category_id: product[0].category_id
-            }
-        })
-        console.log(newProducts)
-        res.json({
-            status: 200,
-            msg: `El producto "${product.name}" fue eliminado`,
-            products: newProducts
+        } catch (error) {
+            console.log(error)
+
+            return res.json({
+                meta: {
+                    status: 500
+                },
+                error: true,
+                data: [{
+                    field: 'modal',
+                    message: error
+                }]
+            })
+        }
+
+        return res.json({
+            meta: {
+                status: 200
+            },
+            data: []
         })
     },
     search: async (req, res) =>{

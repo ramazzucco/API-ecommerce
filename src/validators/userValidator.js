@@ -70,5 +70,6 @@ module.exports = {
             .notEmpty().withMessage("Debe ingresar una nueva contraseña").bail()
             .isAlphanumeric().withMessage(`La contraseña no puede tener los siguientes caracteres !?¡¿+´*""#$%&/()=`)
             .isLength({ min: 8 }).withMessage("La contraseña debe tener minimo 8 caracteres"),
-    ]
+    ],
+
 }

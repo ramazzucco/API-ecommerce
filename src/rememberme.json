@@ -1,1 +1,15 @@
-[]
+[
+ {
+  "id": 1,
+  "first_name": "Ramiro",
+  "last_name": "Mazzucco",
+  "email": "ramazzucco@hotmail.com",
+  "password": "$2b$10$/TirJAnLoOYFrUVpDpEmOeyDWSWz9/q5ZegDBqGaqmOOlceDvJnC2",
+  "address": "av. siempreviva 768",
+  "city": "Springfield",
+  "avatar": "avatar-1598737544821.jpg",
+  "status": 2,
+  "token": "$2b$10$/TirJAnLoOYFrUVpDpEmOeyDWSWz9/q5ZegDBqGaqmOOlceDvJnC2 256d7eaf-71b3-4671-92cd-8e455fc00965",
+  "tokenhashed": "$2b$10$4Ne4VI8Kp9nUPtTbVjE/PebnKOU6TS5AWWJ.UqQqlSwr9WZ9jQgsi"
+ }
+]
