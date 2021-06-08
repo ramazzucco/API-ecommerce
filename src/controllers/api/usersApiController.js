@@ -150,7 +150,7 @@ module.exports = {
 
     login: async(req, res) => {
 
-        const errors = validationResult(req);
+        let errors = validationResult(req);
 
         if(!errors.isEmpty()) {
 
@@ -334,25 +334,39 @@ module.exports = {
     },
 
     profile: async (req, res) => {
-        const user = await db.User.findByPk(Number(req.params.id));
-        const username = user.dataValues.first_name + ' ' + user.dataValues.last_name;
+        try {
+            const user = await db.User.findByPk(Number(req.params.id));
+            const username = user.dataValues.first_name + ' ' + user.dataValues.last_name;
 
-        const { categorys, purchases, users, messages, orders} = await functions.getData(user.dataValues.id, username);
+            const { categorys, purchases, users, messages, orders} = await functions.getData(user.dataValues.id, username);
 
-        return res.json({
-            meta: {
-                status: 200
-            },
-            data: {
-                user: user[0],
-                categorys: categorys,
-                purchases: purchases,
-                users: users,
-                messages: messages,
-                orders: orders
-            }
-        })
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                data: {
+                    user: user,
+                    categorys: categorys,
+                    purchases: purchases,
+                    users: users,
+                    messages: messages,
+                    orders: orders
+                }
+            })
 
+        } catch (error) {
+            return res.json({
+                meta: {
+                    status: 400
+                },
+                error: true,
+                data: {
+                    field: 'modal',
+                    error: error,
+                    message: 'No se ha encontrado el usuario'
+                }
+            })
+        }
     },
 
     logout: async (req, res) => {

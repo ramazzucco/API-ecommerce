@@ -2,6 +2,7 @@ let db = require("../../database/models");
 const fs = require('fs');
 const path = require('path');
 const incommingmessagesPath = path.join(__dirname, '../../incommingmessages.json');
+const functions = require('../../functions/users');
 
 const { Op } = db.Sequelize;
 
@@ -290,6 +291,42 @@ const controller = {
             data: users
         })
     },
+    user: async (req, res) => {
+        try {
+            const user = await db.User.findByPk(Number(req.params.id));
+            const username = user.dataValues.first_name + ' ' + user.dataValues.last_name;
+
+            const { categorys, purchases, users, messages, orders} = await functions.getData(user.dataValues.id, username);
+
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                data: {
+                    user: user,
+                    categorys: categorys,
+                    purchases: purchases,
+                    users: users,
+                    messages: messages,
+                    orders: orders
+                }
+            })
+
+        } catch (error) {
+            return res.json({
+                meta: {
+                    status: 400
+                },
+                error: true,
+                data: [{
+                    field: 'modal',
+                    error: error,
+                    message: 'No se ha encontrado el usuario'
+                }]
+            })
+        }
+
+    },
     messages: async (req, res) => {
         const messages = await db.Message.findAll();
         const userswhithmessages = await db.User.findAll({
@@ -309,6 +346,42 @@ const controller = {
             userswhithmessages: userswhithmessages,
             data: messages
         })
+    },
+    changeorder: async (req, res) => {
+        const updateorder = await db.Order.update({ status: req.body.status },{
+            where: {
+                id: req.body.id
+            }
+        })
+
+        const orders = await db.Order.findAll({
+            where: {
+                users_id: req.body.users_id
+            }
+        });
+
+        if(updateorder){
+            console.log(updateorder)
+
+            return res.json({
+                meta: {
+                    status: 200
+                },
+                data: orders
+            })
+        } else {
+            return res.json({
+                meta: {
+                    status: 500
+                },
+                error: true,
+                data: {
+                    field: 'modal',
+                    message: 'No se puedo actualizar el estado de la orden'
+                }
+
+            })
+        }
     },
     promotions_store: async (req, res) => {
 
@@ -343,13 +416,15 @@ const controller = {
 
     },
     newmessage: async (req, res) => {
-        console.log(req.body)
+        const incommingmessages = await JSON.parse(fs.readFileSync(incommingmessagesPath,{encoding: 'utf-8'}));
 
-        incommingmessage.push(req.body);
+        if(req.body.from_name !== 'ADMIN' && req.body.from_name !== 0){
+            incommingmessages.push(req.body);
+        }
 
         const newmessage = await db.Message.create(req.body);
 
-        console.log(newmessage)
+        fs.writeFileSync(incommingmessagesPath,JSON.stringify(incommingmessagesdeleted,null,' '));
 
         if(!newmessage){
             return res.json({
@@ -372,6 +447,20 @@ const controller = {
                 status: 200,
             },
             data: messages,
+        })
+    },
+    incommingmessage: async (req, res) => {
+        const incommingmessages = await JSON.parse(fs.readFileSync(incommingmessagesPath,{encoding: 'utf-8'}));
+
+        const incommingmessagesdeleted = incommingmessages.filter( message => message.users_id !== Number(req.params.id));
+
+        fs.writeFileSync(incommingmessagesPath,JSON.stringify(incommingmessagesdeleted,null,' '));
+
+        return res.json({
+            meta: {
+                status: 200
+            },
+            data: incommingmessagesdeleted
         })
     }
 }

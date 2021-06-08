@@ -4,8 +4,7 @@ const { Op } = db.Sequelize;
 const getData = async (id, username) => {
 
     const orders = await db.Order.findAll({
-        attributes: [ "number" ],
-        where:{
+        where: {
             users_id: id
         }
     });
@@ -51,11 +50,7 @@ const getDataAdmin = async () => {
 
     const users = await db.User.findAll();
 
-    const messages = await db.Message.findAll({
-        where: {
-            users_id: users.map(user => { return user.id })
-        }
-    });
+    const messages = await db.Message.findAll();
 
     const orderSuccess = await db.Order.findAll({
         where: {

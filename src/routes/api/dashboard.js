@@ -41,6 +41,9 @@ router.post('/products', adminRoute, DashboardApiController.products);
 router.post("/views", adminRoute, DashboardApiController.views);
 router.post('/users', adminRoute, DashboardApiController.users);
 router.post("/messages", adminRoute, DashboardApiController.messages);
+router.post('/users/:id', adminRoute, DashboardApiController.user);
+
+router.put('/orders/change', adminRoute, DashboardApiController.changeorder);
 // router.get('/promotions', DashboardApiController.promotions);
 
 // router.get('/category/:categoryId', DashboardApiController.category);
@@ -48,6 +51,7 @@ router.post("/messages", adminRoute, DashboardApiController.messages);
 // router.post("/newmessage", DashboardApiController.newmessage)
 // router.post("/promotions",upload.single("image"), DashboardApiController.promotions_store)
 
+router.delete('/incommingmessage/:id', adminRoute, DashboardApiController.incommingmessage);
 
 
 module.exports = router;
